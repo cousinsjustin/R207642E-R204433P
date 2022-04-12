@@ -12,13 +12,23 @@ import cv2 as cv
 import tempfile
 import streamlit as st
 
-#import split_video as ss
+import split_video as ss
 
 import os
 
 import numpy as np
 
 import pandas as pd
+
+from keras.applications.vgg16 import VGG16
+from keras.applications.vgg16 import preprocess_input
+from keras.applications.vgg16 import decode_predictions
+from keras.preprocessing.image import img_to_array
+from keras.preprocessing.image import load_img
+# import split_video as sv
+from os import listdir
+from os.path import isfile, join
+
 
 #import cv2
 #import numpy as np
@@ -27,7 +37,7 @@ from keras.applications.vgg16 import preprocess_input
 
 def split_videos_to_frames(path:str):
     
-    cap = cv2.VideoCapture(path)
+    cap = cv.VideoCapture(path)
     
     if cap.isOpened():
         
@@ -54,7 +64,7 @@ def split_videos_to_frames(path:str):
             
             if status:
                 
-                cv2.imwrite(name, frame)
+                cv.imwrite(name, frame)
                 
             currentFrame += 1
             
@@ -65,7 +75,7 @@ def split_videos_to_frames(path:str):
     cap.release()
     
 
-    cv2.destroyAllWindows()
+    cv.destroyAllWindows()
 
 def upload_video(file):
     
@@ -86,11 +96,9 @@ def upload_video(file):
 
 
 
+    uploaded_file = st.file_uploader("Choose a video...", type=["mp4"])
 
-
-uploaded_file = st.file_uploader("Choose a video...", type=["mp4"])
-
-v.upload_video(uploaded_file)
+    upload_video(uploaded_file)
 
 classifications = sst.classifyImages()
 
@@ -117,6 +125,34 @@ if st.button('Search'):
     searchInFrames(input)
     
     st.write("")
+    
+
+
+def classifyImages():
+    model = VGG16()
+    from keras.applications.vgg16 import decode_predictions
+    classify = []
+    frames = [ join('.\\frames', f) for f in listdir('.\\frames') if isfile(join('.\\frames', f)) ]
+    for i in range(len(frames)):    
+
+        image = load_img(frames[i], target_size=(224, 224)) 
+        image = img_to_array(image)
+
+        image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
+        image = preprocess_input(image)
+
+        img_pred = model.predict(image)
+        label = decode_predictions(img_pred) 
+
+        label = label[0][0]
+        result =  label[1]
+
+        classify.append(result)
+    print(classify)
+    
+    return classify
+if __name__ == "__main__":
+    classifyImages()
 
 
 #imports
