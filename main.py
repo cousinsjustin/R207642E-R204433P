@@ -8,10 +8,6 @@ import cv2
 import sys
 import os
 
-
-inceptionV3 = load_model('C:/Users/Cousins/Desktop/ins/vgg16Model.h5')
-
-
 class ObjectDetection(object):
 
     def __init__(self):
@@ -35,6 +31,7 @@ class ObjectDetection(object):
         cv2.destroyAllWindows()
         print('Done splitting')
 
+    inceptionV3 = load_model('C:/Users/Cousins/Desktop/ins/vgg16Model.h5')
     def detect(self):
         print('feeding frames to inceptionV3...')
         for frame in self.get_frames():
