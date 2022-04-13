@@ -9,7 +9,7 @@ import sys
 import os
 
 
-inceptionV3 = load_model('C:/Users/llywellynn/Desktop/ins/vgg16Model.h5')
+inceptionV3 = load_model('C:/Users/Cousins/Desktop/ins/vgg16Model.h5')
 
 
 class ObjectDetection(object):
@@ -19,7 +19,7 @@ class ObjectDetection(object):
 
     def video_to_frames(self, video):
         print('splitting to frames...')
-        frame_name = 'C:/Users/llywellynn/Desktop/ins/static/frames'
+        frame_name = 'C:/Users/Cousins/Desktop/ins/static/frames'
         vidcap = cv2.VideoCapture(video)
         success, image = vidcap.read()
         count = 0
@@ -46,12 +46,12 @@ class ObjectDetection(object):
             label = decode_predictions(y_pred)
             self._objects.append(label[0][1][1])
         print('Done feeding')
-        objects_file = 'C:/Users/llywellynn/Desktop/ins/detected_objects.txt'
+        objects_file = 'C:/Users/Cousins/Desktop/ins/detected_objects.txt'
         with open(objects_file, 'w') as f:
             f.write(json.dumps(self._objects))
 
     def get_frames(self):
-        frames_arr = glob("C:/Users/llywellynn/Desktop/ins/static/frames/*.jpg")
+        frames_arr = glob("C:/Users/Cousins/Desktop/ins/static/frames/*.jpg")
         return frames_arr
 
     def get_objects(self):
@@ -59,7 +59,7 @@ class ObjectDetection(object):
 
     def search_objects(self, _object):
         print('searching...')
-        objects_file = 'C:/Users/llywellynn/Desktop/ins/detected_objects.txt'
+        objects_file = 'C:/Users/Cousins/Desktop/ins/detected_objects.txt'
         with open(objects_file, 'r') as objects_file:
             objects = list(json.loads(objects_file.read()))
         search_results = []
@@ -73,7 +73,7 @@ class ObjectDetection(object):
         return search_results
 
     def read_objects(self):
-        objects_file = 'C:/Users/llywellynn/Desktop/ins/detected_objects.txt'
+        objects_file = 'C:/Users/Cousins/Desktop/ins/detected_objects.txt'
         with open(objects_file, 'r') as objects_file:
             objects = set(json.loads(objects_file.read()))
         return objects
